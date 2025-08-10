@@ -4,7 +4,6 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import torch
 import torchvision.transforms as transforms
-from config import CLASS_NAMES, TREATMENTS
 
 # ======================
 # SAFETY CHECKS
@@ -53,7 +52,7 @@ if missing_files:
 # ======================
 # IMPORT AFTER CHECKS
 # ======================
-from config import CLASS_NAMES, TREATMENTS
+from config import CLASS_NAMES, MODEL_NAME
 from model import load_model
 
 # ======================
