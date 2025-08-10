@@ -6,6 +6,7 @@ import torch
 import torchvision.transforms as transforms
 from model import load_model
 from config import CLASS_NAMES, TREATMENTS
+import streamlit as st
 
 # ======================
 # PAGE CONFIG
