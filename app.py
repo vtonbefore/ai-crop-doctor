@@ -52,7 +52,7 @@ if missing_files:
 # ======================
 # IMPORT AFTER CHECKS
 # ======================
-from config import CLASS_NAMES, MODEL_NAME
+from config import CLASS_NAMES
 from model import load_model
 
 # ======================
