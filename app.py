@@ -4,6 +4,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import torch
 import torchvision.transforms as transforms
+from config import CLASS_NAMES, TREATMENTS
 
 # ======================
 # SAFETY CHECKS
