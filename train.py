@@ -3,18 +3,20 @@ import json
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 from torchvision import datasets, transforms, models
 
-DATA_DIR = "./data/PlantVillage"   
+DATA_DIR = "./data/PlantVillage"   # Change if needed
 MODEL_DIR = "./model"
 MODEL_PATH = os.path.join(MODEL_DIR, "crop_disease_model.pth")
 CLASS_NAMES_PATH = os.path.join(MODEL_DIR, "class_names.json")
 
-BATCH_SIZE = 32
-NUM_EPOCHS = 10
+BATCH_SIZE = 16
+NUM_EPOCHS = 2       # Short training
 LEARNING_RATE = 0.001
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+MAX_IMAGES = 500     # Limit dataset size for speed
 
 def train():
     if not os.path.exists(MODEL_DIR):
@@ -30,28 +32,29 @@ def train():
     ])
 
     print(f"Loading dataset from {DATA_DIR} ...")
-    dataset = datasets.ImageFolder(DATA_DIR, transform=transform)
+    dataset_full = datasets.ImageFolder(DATA_DIR, transform=transform)
 
-    if not os.path.exists(CLASS_NAMES_PATH):
-        print(f"Saving class names to {CLASS_NAMES_PATH} ...")
-        with open(CLASS_NAMES_PATH, "w") as f:
-            json.dump(dataset.classes, f)
-    else:
-        print(f"Class names JSON already exists at {CLASS_NAMES_PATH}")
+    # Save class names
+    with open(CLASS_NAMES_PATH, "w") as f:
+        json.dump(dataset_full.classes, f)
 
-    dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=4)
+    # Take only a subset for speed
+    indices = list(range(min(MAX_IMAGES, len(dataset_full))))
+    dataset = Subset(dataset_full, indices)
+    dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
+
+    print(f"Training on {len(dataset)} images from {len(dataset_full.classes)} classes.")
 
     print("Building model...")
     model = models.resnet18(pretrained=True)
     num_features = model.fc.in_features
-    model.fc = nn.Linear(num_features, len(dataset.classes))
+    model.fc = nn.Linear(num_features, len(dataset_full.classes))
     model = model.to(DEVICE)
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     print(f"Starting training for {NUM_EPOCHS} epochs on device {DEVICE} ...")
-
     for epoch in range(NUM_EPOCHS):
         model.train()
         running_loss = 0.0
@@ -59,8 +62,7 @@ def train():
         total = 0
 
         for inputs, labels in dataloader:
-            inputs = inputs.to(DEVICE)
-            labels = labels.to(DEVICE)
+            inputs, labels = inputs.to(DEVICE), labels.to(DEVICE)
 
             optimizer.zero_grad()
             outputs = model(inputs)
@@ -79,7 +81,7 @@ def train():
 
     print(f"Saving model to {MODEL_PATH} ...")
     torch.save(model.state_dict(), MODEL_PATH)
-    print("Training complete and model saved.")
+    print("✅ Training complete and model saved.")
 
 if __name__ == "__main__":
     train()
