@@ -1,0 +1,32 @@
+[
+  {
+    "class": "healthy",
+    "description": "Healthy plant with no disease symptoms.",
+    "treatment": "No treatment needed.",
+    "prevention": "Maintain good agricultural practices."
+  },
+  {
+    "class": "powdery_mildew",
+    "description": "Fungal disease causing white powdery spots on leaves.",
+    "treatment": "Apply sulfur-based fungicides.",
+    "prevention": "Avoid overcrowding plants and ensure good air circulation."
+  },
+  {
+    "class": "rust",
+    "description": "Rust disease characterized by orange pustules on leaves.",
+    "treatment": "Use fungicides containing chlorothalonil.",
+    "prevention": "Plant resistant varieties and remove infected debris."
+  },
+  {
+    "class": "leaf_blight",
+    "description": "Causes large brown lesions on leaves leading to leaf death.",
+    "treatment": "Remove affected leaves and apply fungicides.",
+    "prevention": "Rotate crops and avoid overhead irrigation."
+  },
+  {
+    "class": "early_blight",
+    "description": "Early blight causes dark spots on leaves and stems.",
+    "treatment": "Use copper-based fungicides.",
+    "prevention": "Ensure crop rotation and destroy infected plant material."
+  }
+]
