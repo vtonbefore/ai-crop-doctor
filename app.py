@@ -74,7 +74,7 @@ st.sidebar.info("Built with ❤️ using PyTorch + Streamlit")
 # ======================
 @st.cache_resource
 def load_ai_model():
-    model = model
+    model = model()
     model.load_states_dict(torch.load("plant_disease_model.pth"))
     model.eval()
     return model
