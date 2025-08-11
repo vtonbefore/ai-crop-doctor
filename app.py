@@ -72,16 +72,21 @@ st.sidebar.info("Built with ❤️ using PyTorch + Streamlit")
 # ======================
 # MODEL LOADING
 # ======================
-model = None
+@st.cache_resource
+def load_ai_model():
+    model = load_model()  # your actual loading code here
+    model.eval()
+    return model
+
 with st.spinner("Loading AI model... Please wait ⏳"):
     try:
-        model = load_model()
-        model.eval()
+        model = load_ai_model()
     except Exception as e:
         st.error(f"❌ Failed to load model: {e}")
         st.stop()
 
 st.success("✅ AI model loaded successfully!")
+
 
 # ======================
 # UPLOAD SECTION
