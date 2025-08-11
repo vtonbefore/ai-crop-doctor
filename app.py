@@ -68,6 +68,25 @@ st.sidebar.write("**Classes:**")
 for c in CLASS_NAMES:
     st.sidebar.write(f"- {c}")
 st.sidebar.info("Built with ❤️ using PyTorch + Streamlit")
+# ==================
+# MODEL LOADING
+# ==================
+
+@st.cache_resource
+def load_ai_model():
+    model = model()  
+    model.load_state_dict(torch.load("crop_disease_model.pth"))
+    model.eval()
+    return model
+
+with st.spinner("Loading AI model... Please wait ⏳"):
+    try:
+        model = load_ai_model()
+    except Exception as e:
+        st.error(f"❌ Failed to load model: {e}")
+        st.stop()
+
+st.success("✅ AI model loaded successfully!")
 
 
 # ======================
